@@ -1,0 +1,33 @@
+loader:
+  _target_: topobench.data.loaders.BrainConnectomeDatasetLoader
+  parameters:
+    data_domain: graph
+    data_type: BrainConnectome
+    data_name: brain_pnc_community
+    data_dir: ${paths.data_dir}/${dataset.loader.parameters.data_domain}/${dataset.loader.parameters.data_type}
+    # ABSOLUTE path to the harness npz cache (override per run / feature mode):
+    cache_dir: /home/compa/Documents/working_dir/TopoBenchChallenge/data/cache/brain_pnc_community
+
+# Dataset parameters
+parameters:
+  num_features: 6           # local_stats feature count (override to 400 for identity_leak)
+  num_classes: 7            # Yeo-7 networks
+  task: classification
+  loss_type: cross_entropy
+  monitor_metric: accuracy
+  task_level: node
+
+# splits — inductive across subjects
+split_params:
+  learning_setting: inductive
+  data_split_dir: ${dataset.loader.parameters.data_dir}/data_splits
+  data_seed: 0
+  split_type: random
+  k: 10
+  train_prop: 0.7
+
+# Dataloader parameters
+dataloader_params:
+  batch_size: 16
+  num_workers: 0
+  pin_memory: False

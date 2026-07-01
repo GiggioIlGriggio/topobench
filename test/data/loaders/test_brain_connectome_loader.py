@@ -36,3 +36,4 @@ def test_loader_yields_pyg_dataset(tmp_path):
     assert len(items) == 3
     assert isinstance(items[0], Data)
     assert items[0].x.shape[1] == 6 and items[0].y.dtype == torch.long
+    assert items[0].edge_index.dtype == torch.long

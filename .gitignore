@@ -209,3 +209,16 @@ result_BREC/
 # test temporary
 .test_tmp/
 uv.lock
+
+# Cluster_Helper
+*.sif
+cluster_outputs/
+npz_cache/
+slurm/logs/*
+!slurm/logs/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/

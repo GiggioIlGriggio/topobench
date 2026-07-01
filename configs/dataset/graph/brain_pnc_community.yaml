@@ -17,10 +17,15 @@ parameters:
   monitor_metric: accuracy
   task_level: node
 
-# splits — inductive across subjects
+# splits — inductive across subjects.
+# NOTE: both the processed lifting cache (keyed by data_name) and the split dir
+# (namespaced by data_name below) are keyed by data_name, NOT by the npz content.
+# So EACH logical variant (honest / identity-leak / label-shuffle / full-cohort)
+# MUST be run with a distinct dataset.loader.parameters.data_name override, or it
+# will silently reuse another variant's cached complex + split.
 split_params:
   learning_setting: inductive
-  data_split_dir: ${dataset.loader.parameters.data_dir}/data_splits
+  data_split_dir: ${dataset.loader.parameters.data_dir}/data_splits/${dataset.loader.parameters.data_name}
   data_seed: 0
   split_type: random
   k: 10

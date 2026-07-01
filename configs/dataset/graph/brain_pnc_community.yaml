@@ -28,6 +28,11 @@ split_params:
 
 # Dataloader parameters
 dataloader_params:
-  batch_size: 16
+  # batch_size MUST be 1: MPSN densifies the batched edge x triangle incidence
+  # matrix (mpsn.py _to_dense), and a batched block-diagonal densifies to
+  # (B*edges) x (B*triangles) -- a batch^2 blow-up. Dense brain FC has ~11k
+  # triangles/graph, so batch=16 tried to allocate ~39 GiB (OOM). At batch=1 the
+  # simplicial complex fits in <1 GB. Do not raise without checking GPU memory.
+  batch_size: 1
   num_workers: 0
   pin_memory: False

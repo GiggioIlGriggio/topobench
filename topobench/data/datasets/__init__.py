@@ -7,6 +7,10 @@ from typing import ClassVar
 
 from torch_geometric.data import InMemoryDataset
 
+from topobench.data.datasets.brain_connectome_dataset import (
+    BrainConnectomeDataset,
+)
+
 
 class DatasetManager:
     """Manages automatic discovery and registration of dataset classes."""
@@ -127,6 +131,8 @@ __all__ = [
     "FIXED_SPLITS_DATASETS",
     "HETEROPHILIC_DATASETS",
     "MANUAL_DATASETS",
+    # Brain connectome dataset (torch.utils.data.Dataset, not InMemoryDataset)
+    "BrainConnectomeDataset",
     # Discovered dataset classes
     *MANUAL_DATASETS.keys(),
 ]

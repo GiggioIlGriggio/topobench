@@ -23,7 +23,10 @@ class BrainConnectomeDatasetLoader(AbstractLoader):
     ----------
     parameters : DictConfig
         Must contain ``data_dir``, ``data_name`` and ``cache_dir`` (absolute
-        path to the directory of ``sub-*.npz`` files).
+        path to the directory of ``sub-*.npz`` files). Optionally ``y_dtype``:
+        ``"long"`` (default, node/graph classification — e.g. the Yeo-7 community
+        task) or ``"float"`` (graph-level regression — e.g. the age task). The
+        default preserves the community-detection behaviour exactly.
     """
 
     def __init__(self, parameters: DictConfig) -> None:
@@ -43,6 +46,11 @@ class BrainConnectomeDatasetLoader(AbstractLoader):
             If no ``sub-*.npz`` files are found in ``cache_dir``.
         """
         cache_dir = Path(self.parameters["cache_dir"])
+        y_dtype = (
+            torch.float
+            if str(self.parameters.get("y_dtype", "long")) == "float"
+            else torch.long
+        )
         data_list = []
         for npz_path in sorted(cache_dir.glob("sub-*.npz")):
             with np.load(npz_path) as z:
@@ -52,7 +60,7 @@ class BrainConnectomeDatasetLoader(AbstractLoader):
                         edge_index=torch.tensor(
                             z["edge_index"], dtype=torch.long
                         ),
-                        y=torch.tensor(z["y"], dtype=torch.long),
+                        y=torch.tensor(z["y"], dtype=y_dtype),
                     )
                 )
         if not data_list:
